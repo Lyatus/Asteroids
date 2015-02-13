@@ -1,19 +1,19 @@
 class Game {
   Minim minim;
-  Spaceship spaceship = new Spaceship(this);
+  Spaceship spaceship;
   ArrayList<GameObject> objects = new ArrayList<GameObject>();
   float terrainWidth;
   float terrainHeight;
   boolean gameover = false;
   int score = 0;
+  AudioPlayer levelSound;
 
   Game(float terrainWidth, float terrainHeight, Minim minim) {
+    this.minim = minim;
+    this.spaceship = new Spaceship(this);
     this.terrainWidth = terrainWidth;
     this.terrainHeight = terrainHeight;
-    this.minim = minim;
-    //spaceship.player = minim.o
-    for (int i=0; i<4; i++)
-      add(new Asteroid(this, new PVector(random(-terrainWidth, terrainWidth), random(-terrainHeight, terrainHeight)), new PVector(random(-.2, .2), random(-.2, .2)), 64));
+    this.levelSound = minim.loadFile("sound/level.wav");
   }
   void constrain(PVector p) {
     if (p.x>terrainWidth)
@@ -44,19 +44,30 @@ class Game {
     for (GameObject object : objects)
       object.draw();
     spaceship.draw();
+    text(score, 0, -terrainHeight);
   }
   void update() {
-    if (!gameover) {
-      for (int i=0; i<objects.size (); i++)
-        objects.get(i).update();
-      spaceship.update();
+    boolean noAsteroid = true;
+    for (int i=0; i<objects.size (); i++) {
+      if (objects.get(i) instanceof Asteroid)
+        noAsteroid = false;
+      objects.get(i).update();
     }
+    spaceship.update();
+    if (noAsteroid)
+      nextLevel();
   }
   void shoot() {
     spaceship.shoot();
   }
   void goTo(PVector p) {
     spaceship.goTo(p);
+  }
+  void nextLevel() {
+    levelSound.rewind();
+    levelSound.play();
+    for (int i=0; i<4; i++)
+      add(new Asteroid(this, new PVector(random(-terrainWidth, terrainWidth), random(-terrainHeight, terrainHeight)), new PVector(random(-.2, .2), random(-.2, .2)), 64));
   }
 }
 
