@@ -19,34 +19,16 @@ class Spaceship extends GameObject {
   }
 
   // Controls
-  void left() {
-    rotation -= .1;
-  }
-  void right() {
-    rotation += .1;
-  }
-  void forward() {
-    speed.x += cos(rotation)*.1;
-    speed.y += sin(rotation)*.1;
-  }
   void shoot() {
     if (lastShoot<millis()-shootTimer) {
       game.add(new Bullet(game, new PVector(position.x+cos(rotation)*20, position.y+sin(rotation)*20), rotation));
       lastShoot = millis();
     }
   }
-  void lookAt(PVector p) {
+  void goTo(PVector p) {
     float neededRotation = atan2(p.y-position.y, p.x-position.x);
-    if (neededRotation<0)
-      neededRotation += TWO_PI;
-    float rotationDifference = neededRotation-rotation;
-    if (rotationDifference>PI)
-      rotationDifference -= TWO_PI;
-    else if (rotationDifference<-PI)
-      rotationDifference += TWO_PI;
-    if (rotationDifference<0)
-      left();
-    else right();
+    rotation = neededRotation;
+    speed = new PVector((p.x-position.x)*.01, (p.y-position.y)*.01);
   }
 }
 

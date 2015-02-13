@@ -13,7 +13,7 @@ class Asteroid extends GameObject {
     this.rotationSpeed = random(-.05, .05);
     for (int i=0; i<points.length; i++) {
       float angle = TWO_PI*(float)i/(float)points.length;
-      points[i] = new PVector(cos(angle)*random(radius*.9, radius*1.1), sin(angle)*random(radius*.9, radius*1.1));
+      points[i] = new PVector(cos(angle)*random(radius*.8, radius*1.2), sin(angle)*random(radius*.8, radius*1.2));
     }
   }
   void drawShape() {

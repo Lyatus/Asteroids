@@ -4,11 +4,11 @@ class Bullet extends GameObject {
     super(game);
     this.position = position;
     this.speed = new PVector(cos(rotation)*4, sin(rotation)*4);
-    this.radius = 2;
+    this.radius = 1;
     this.spawnTime = millis();
   }
   void drawShape() {
-    ellipse(-2, -2, 4, 4);
+    ellipse(-1, -1, 2, 2);
   }
   void updateObject() {
     GameObject collideObject = game.collides(this);
@@ -17,7 +17,7 @@ class Bullet extends GameObject {
         ((Asteroid)collideObject).split();
       game.remove(this);
     }
-    if(spawnTime+2000<millis())
+    if(spawnTime+1500<millis())
       game.remove(this);
   }
 }
