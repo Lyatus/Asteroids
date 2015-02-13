@@ -8,8 +8,10 @@ import processing.serial.*;
 
 int windowWidth = displayWidth;
 int windowHeight = displayHeight;
+Button startButton, tutorialButton;
 Game game;
 Minim minim;
+AudioPlayer tutorialSound, gameoverSound, driftSound;
 
 void setup() {
   windowWidth = displayWidth;
@@ -20,13 +22,26 @@ void setup() {
   fill(255);
   stroke(255);
   minim = new Minim(this);
+  startButton = new Button(windowWidth/2-256, 128, 512, 64, "Start");
+  tutorialButton = new Button(windowWidth/2-256, 256, 512, 64, "Tutorial");
+  tutorialSound = minim.loadFile("voix.mp3");
+  gameoverSound = minim.loadFile("gameover.mp3");
+  driftSound = minim.loadFile("drift.wav");
 }
 void draw() {
   background(0);
   if (game==null) { // Menu
     text("Asteroids 5.0", windowWidth/2, 10);
-    if (mousePressed)
+    startButton.draw();
+    tutorialButton.draw();
+    if (startButton.pressed()) {
+      tutorialSound.pause();
       game = new Game(windowWidth/2, windowHeight/2, minim);
+    }
+    if (tutorialButton.pressed()) {
+      tutorialSound.rewind();
+      tutorialSound.play();
+    }
   } else { // Game
     game.update();
     pushMatrix();
@@ -35,7 +50,15 @@ void draw() {
     popMatrix();
     game.goTo(new PVector(mouseX-windowWidth/2, mouseY-windowHeight/2));
     game.shoot();
-    if (game.gameover) game = null;
+    if (game.gameover) {
+      gameoverSound.rewind();
+      gameoverSound.play();
+      game = null;
+    }
+    if (!driftSound.isPlaying() && (mouseX < 10 || mouseY < 10 || mouseX > windowWidth-10 || mouseY > windowHeight-10)) {
+      driftSound.rewind();
+      driftSound.play();
+    }
   }
 }
 boolean sketchFullScreen() {

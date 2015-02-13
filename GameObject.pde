@@ -27,7 +27,8 @@ abstract class GameObject {
     
     // Object sound
     if(player!=null){
-        player.setPan(-1);
+        // This is where I'd put sound spatialization
+        // If I had one
     }
     updateObject();
   }

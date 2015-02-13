@@ -14,7 +14,8 @@ class Spaceship extends GameObject {
     line(-10, 5, 10, 0);
   }
   void updateObject() {
-    if (game.collides(this)!=null)
+    GameObject colliding = game.collides(this);
+    if (colliding!=null && colliding instanceof Asteroid)
       game.endGame();
   }
 
