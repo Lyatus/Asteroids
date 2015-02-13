@@ -1,26 +1,20 @@
-class Spaceship {
-  Game game;
-  PVector position, speed;
-  float rotation;
-
+class Spaceship extends GameObject {
+  int lastShoot = 0;
+  int shootTimer = 100;
   Spaceship(Game game) {
-    this.game = game;
+    super(game);
     this.position = new PVector(0, 0);
     this.speed = new PVector(0, 0);
     this.rotation = 0;
+    this.radius = 10;
+    this.friction = .01;
   }
-  void draw() {
-    pushMatrix();
-    translate(position.x, position.y);
-    rotate(rotation);
-    rect(-10, -5, 20, 10);
-    popMatrix();
+  void drawShape() {
+    line(-10, -5, 10, 0);
+    line(-10, 5, 10, 0);
   }
-  void update() {
-    position.x += speed.x;
-    position.y += speed.y;
-    game.constrain(position);
-    if(game.collideAt(position,10))
+  void updateObject() {
+    if (game.collides(this)!=null)
       game.endGame();
   }
 
@@ -34,6 +28,25 @@ class Spaceship {
   void forward() {
     speed.x += cos(rotation)*.1;
     speed.y += sin(rotation)*.1;
+  }
+  void shoot() {
+    if (lastShoot<millis()-shootTimer) {
+      game.add(new Bullet(game, new PVector(position.x+cos(rotation)*20, position.y+sin(rotation)*20), rotation));
+      lastShoot = millis();
+    }
+  }
+  void lookAt(PVector p) {
+    float neededRotation = atan2(p.y-position.y, p.x-position.x);
+    if (neededRotation<0)
+      neededRotation += TWO_PI;
+    float rotationDifference = neededRotation-rotation;
+    if (rotationDifference>PI)
+      rotationDifference -= TWO_PI;
+    else if (rotationDifference<-PI)
+      rotationDifference += TWO_PI;
+    if (rotationDifference<0)
+      left();
+    else right();
   }
 }
 

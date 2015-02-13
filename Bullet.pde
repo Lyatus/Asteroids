@@ -1,22 +1,24 @@
-class Bullet {
-  Game game;
-  PVector position, speed;
-
+class Bullet extends GameObject {
+  int spawnTime;
   Bullet(Game game, PVector position, float rotation) {
+    super(game);
     this.position = position;
-    this.speed = new PVector(cos(rotation), sin(rotation));
+    this.speed = new PVector(cos(rotation)*4, sin(rotation)*4);
+    this.radius = 2;
+    this.spawnTime = millis();
   }
-  void draw() {
-    pushMatrix();
-    translate(position.x, position.y);
+  void drawShape() {
     ellipse(-2, -2, 4, 4);
-    popMatrix();
   }
-  void update() {
-    position.x += speed.x;
-    position.y += speed.y;
-    if(game.collideAt(position,4))
-      game.destroy(this);
+  void updateObject() {
+    GameObject collideObject = game.collides(this);
+    if (collideObject!=null) {
+      if (collideObject instanceof Asteroid)
+        ((Asteroid)collideObject).split();
+      game.remove(this);
+    }
+    if(spawnTime+2000<millis())
+      game.remove(this);
   }
 }
 

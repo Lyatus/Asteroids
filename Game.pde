@@ -1,7 +1,6 @@
 class Game {
   Spaceship spaceship = new Spaceship(this);
-  ArrayList<Asteroid> asteroids = new ArrayList<Asteroid>();
-  ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+  ArrayList<GameObject> objects = new ArrayList<GameObject>();
   float terrainWidth;
   float terrainHeight;
   boolean gameover = false;
@@ -9,7 +8,8 @@ class Game {
   Game(float terrainWidth, float terrainHeight) {
     this.terrainWidth = terrainWidth;
     this.terrainHeight = terrainHeight;
-    asteroids.add(new Asteroid(this, new PVector(100, 100), 50));
+    for(int i=0;i<4;i++)
+      add(new Asteroid(this, new PVector(random(-terrainWidth, terrainWidth),random(-terrainHeight,terrainHeight)), new PVector(random(-.2,.2),random(-.2,.2)), 50));
   }
   void constrain(PVector p) {
     if (p.x>terrainWidth)
@@ -21,21 +21,17 @@ class Game {
     if (p.y<-terrainHeight)
       p.y += terrainHeight*2;
   }
-  boolean collideAt(PVector p, float radius) {
-    for (int i=0; i<asteroids.size (); i++)
-      if (asteroids.get(i).collideAt(p, radius))
-        return true;
-    return false;
+  GameObject collides(GameObject object) {
+    for (int i=0; i<objects.size (); i++)
+      if (objects.get(i)!=object && objects.get(i).collides(object))
+        return objects.get(i);
+    return null;
   }
-  void destroy(Object o) {
-    for (int i=0; i<asteroids.size (); i++)
-      if (asteroids.get(i)==o) {
-        asteroids.remove(i);
-        return;
-      }
+  void remove(GameObject object) {
+    objects.remove(object);
   }
-  void addBullet(Bullet bullet){
-     bullets.add(bullet); 
+  void add(GameObject object) {
+    objects.add(object);
   }
   void endGame() {
     gameover = true;
@@ -44,18 +40,14 @@ class Game {
     background(0);
     fill(255);
     stroke(255);
-    for (Asteroid asteroid : asteroids)
-      asteroid.draw();
-    for (Bullet bullet : bullets)
-      bullet.draw();
+    for (GameObject object : objects)
+      object.draw();
     spaceship.draw();
   }
   void update() {
     if (!gameover) {
-      for (Asteroid asteroid : asteroids)
-        asteroid.update();
-      for (Bullet bullet : bullets)
-        bullet.update();
+      for (int i=0; i<objects.size (); i++)
+        objects.get(i).update();
       spaceship.update();
     }
   }
@@ -67,6 +59,12 @@ class Game {
   }
   void forward() {
     spaceship.forward();
+  }
+  void shoot() {
+    spaceship.shoot();
+  }
+  void lookAt(PVector p){
+    spaceship.lookAt(p);
   }
 }
 

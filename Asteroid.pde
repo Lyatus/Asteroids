@@ -1,36 +1,32 @@
-class Asteroid {
-  Game game;
-  PVector position, speed;
-  float radius, rotation, rotationSpeed;
+class Asteroid extends GameObject {
   PVector[] points = new PVector[8];
+  float speedMul = 1.5;
+  float speedRand = .5;
+  float minRadius = 8;
 
-  Asteroid(Game game, PVector position, float radius) {
-    this.game = game;
+  Asteroid(Game game, PVector position, PVector parentSpeed, float radius) {
+    super(game);
     this.position = position;
-    this.speed = new PVector(random(-1, 1), random(-1, 1));
+    this.speed = new PVector(parentSpeed.x*speedMul+random(-speedRand, speedRand), parentSpeed.y*speedMul+random(-speedRand, speedRand));
     this.radius = radius;
     this.rotation = 0;
-    this.rotationSpeed = random(0, 1);
+    this.rotationSpeed = random(-.05, .05);
     for (int i=0; i<points.length; i++) {
       float angle = TWO_PI*(float)i/(float)points.length;
       points[i] = new PVector(cos(angle)*random(radius*.9, radius*1.1), sin(angle)*random(radius*.9, radius*1.1));
     }
   }
-  void draw() {
-    pushMatrix();
-    translate(position.x, position.y);
+  void drawShape() {
     for (int i=0; i<points.length; i++)
       line(points[i].x, points[i].y, points[(i+1)%points.length].x, points[(i+1)%points.length].y);
-    popMatrix();
   }
-  void update() {
-    position.x += speed.x;
-    position.y += speed.y;
-    rotation += rotationSpeed;
-    game.constrain(position);
+  void updateObject() {
   }
-  boolean collideAt(PVector p, float radius) {
-    return position.dist(p)<(radius+this.radius);
+  void split() {
+    game.remove(this);
+    if (radius>minRadius)
+      for (int i=0; i<2; i++)
+        game.add(new Asteroid(game, new PVector(position.x+random(-radius, radius), position.y+random(-radius, radius)), speed, radius/2));
   }
 }
 
