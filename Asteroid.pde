@@ -15,6 +15,12 @@ class Asteroid extends GameObject {
       float angle = TWO_PI*(float)i/(float)points.length;
       points[i] = new PVector(cos(angle)*random(radius*.8, radius*1.2), sin(angle)*random(radius*.8, radius*1.2));
     }
+    if (radius>=minRadius*3)
+      player = game.minim.loadFile("SONOK/explode1.wav");
+    else if (radius>=minRadius*2)
+      player = game.minim.loadFile("SONOK/explode2.wav");
+    else
+      player = game.minim.loadFile("SONOK/explode3.wav");
   }
   void drawShape() {
     for (int i=0; i<points.length; i++)
@@ -23,6 +29,7 @@ class Asteroid extends GameObject {
   void updateObject() {
   }
   void split() {
+    player.play();
     game.remove(this);
     if (radius>minRadius)
       for (int i=0; i<2; i++)

@@ -27,7 +27,7 @@ abstract class GameObject {
     
     // Object sound
     if(player!=null){
-        player.setPan(random(-1,1));
+        player.setPan(-1);
     }
     updateObject();
   }

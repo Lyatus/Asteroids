@@ -5,14 +5,15 @@ class Game {
   float terrainWidth;
   float terrainHeight;
   boolean gameover = false;
+  int score = 0;
 
   Game(float terrainWidth, float terrainHeight, Minim minim) {
     this.terrainWidth = terrainWidth;
     this.terrainHeight = terrainHeight;
     this.minim = minim;
     //spaceship.player = minim.o
-    for(int i=0;i<4;i++)
-      add(new Asteroid(this, new PVector(random(-terrainWidth, terrainWidth),random(-terrainHeight,terrainHeight)), new PVector(random(-.2,.2),random(-.2,.2)), 64));
+    for (int i=0; i<4; i++)
+      add(new Asteroid(this, new PVector(random(-terrainWidth, terrainWidth), random(-terrainHeight, terrainHeight)), new PVector(random(-.2, .2), random(-.2, .2)), 64));
   }
   void constrain(PVector p) {
     if (p.x>terrainWidth)
@@ -40,9 +41,6 @@ class Game {
     gameover = true;
   }
   void draw() {
-    background(0);
-    fill(255);
-    stroke(255);
     for (GameObject object : objects)
       object.draw();
     spaceship.draw();
@@ -57,7 +55,7 @@ class Game {
   void shoot() {
     spaceship.shoot();
   }
-  void goTo(PVector p){
+  void goTo(PVector p) {
     spaceship.goTo(p);
   }
 }

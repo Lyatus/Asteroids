@@ -6,19 +6,27 @@ import ddf.minim.ugens.*;
 import ddf.minim.effects.*;
 import processing.serial.*;
 
-int windowWidth = 800;
-int windowHeight = 600;
+int windowWidth = displayWidth;
+int windowHeight = displayHeight;
 Game game;
 Minim minim;
 
 void setup() {
+  windowWidth = displayWidth;
+  windowHeight = displayHeight;
   size(windowWidth, windowHeight);
+  textFont(createFont("Courier New", 64));
+  textAlign(CENTER, TOP);
+  fill(255);
+  stroke(255);
   minim = new Minim(this);
-  game = new Game(windowWidth/2, windowHeight/2, minim);
 }
 void draw() {
+  background(0);
   if (game==null) { // Menu
-    game = new Game(windowWidth/2, windowHeight/2, minim);
+    text("Asteroids 5.0", windowWidth/2, 10);
+    if (mousePressed)
+      game = new Game(windowWidth/2, windowHeight/2, minim);
   } else { // Game
     game.update();
     pushMatrix();
@@ -29,5 +37,8 @@ void draw() {
     game.shoot();
     if (game.gameover) game = null;
   }
+}
+boolean sketchFullScreen() {
+  return true;
 }
 

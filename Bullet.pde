@@ -17,7 +17,7 @@ class Bullet extends GameObject {
         ((Asteroid)collideObject).split();
       game.remove(this);
     }
-    if(spawnTime+1500<millis())
+    if (spawnTime+1500<millis())
       game.remove(this);
   }
 }
