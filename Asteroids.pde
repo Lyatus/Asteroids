@@ -24,9 +24,9 @@ void setup() {
   minim = new Minim(this);
   startButton = new Button(windowWidth/2-256, 128, 512, 64, "Start");
   tutorialButton = new Button(windowWidth/2-256, 256, 512, 64, "Tutorial");
-  tutorialSound = minim.loadFile("voix.mp3");
-  gameoverSound = minim.loadFile("gameover.mp3");
-  driftSound = minim.loadFile("drift.wav");
+  tutorialSound = minim.loadFile("sound/voix.mp3");
+  gameoverSound = minim.loadFile("sound/gameover.mp3");
+  driftSound = minim.loadFile("sound/drift.wav");
 }
 void draw() {
   background(0);
