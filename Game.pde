@@ -42,9 +42,17 @@ class Game {
   }
   void draw() {
     for (GameObject object : objects)
-      object.draw();
+    object.draw();
     spaceship.draw();
     text(score, 0, -terrainHeight);
+    
+    //changement curseur pour simuler l'oculometrie
+    if(cursorEyeT) {
+      cursor(ImageEyeTCursor, 0, 0);
+    } else {
+      cursor(ARROW);
+    }
+    
   }
   void update() {
     boolean noAsteroid = true;

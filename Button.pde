@@ -15,7 +15,8 @@ class Button {
     fill((hover())?hoverColor:normalColor);
     rect(x, y, width, height);
     fill(255);
-    text(title,x+width/2,y);
+    //text(title,x+width/2,y);
+    text(title,x+width/2,y+8); //mat
     popStyle();
   }
   boolean pressed() {
